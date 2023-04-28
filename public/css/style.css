@@ -1,0 +1,58 @@
+/* Estilos para el encabezado */
+h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Estilos para la sección de productos */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .row-gap-5 > [class*='col-'] {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .card {
+    border: none;
+  }
+  
+  .card-body {
+    padding: 1.25rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-text {
+    margin-bottom: 1rem;
+  }
+  
+  .list-group-item {
+    border: none;
+    padding: 0.75rem 1.25rem;
+    background-color: #f8f9fa;
+  }
+  
+  .list-group-item.active {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+  }
+  
+  .list-group-item.active:hover {
+    background-color: #0062cc;
+    border-color: #005cbf;
+  }
+  
+  .cart {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+  }
+  

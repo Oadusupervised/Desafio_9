@@ -1,0 +1,58 @@
+<h1>realTimeMessages</h1>
+<form id="cargaCarts">
+<label for="id">id</label><input id="inputId" name="id" type="text">
+<label for="id_del_producto">id_del_producto</label><input id="inputId_del_producto" name="id_del_producto" type="text">
+<label for="cantidad">cantidad</label><input id="inputCantidad" name="cantidad" type="number">
+<button type="submit" id="btnEnviar3">enviar</button>
+</form>
+
+
+ <div class="container mt-5">
+    <h2>{{Head}}</h2>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="../public/css/style.css">
+    {{#if hayDocs}}
+      <h4>Carritos:</h4>
+      <div class="container text-center mb-5">
+        <div class="row row-gap-5">
+          {{#each docs}}
+            <div class="col-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{this.id}}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                  {{#each this.nombreProducts}}
+                  <li class="list-group-item">(Producto:{{this.product}}) (cantidad: {{this.quantity}})</li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{else}}
+      <p class="">no hay carritos para mostrar</p>
+    {{/if}}
+
+
+
+
+
+
+<a {{#if hasPrevPage}} href="/views/realTimeCarts/?limit={{limit}}&page={{prevPage}}" {{/if}}>Prev</a>
+[{{ page }}]
+<a {{#if hasNextPage}} href="/views/realTimeCarts/?limit={{limit}}&page={{nextPage}}" {{/if}}>Next</a><br>
+Página: <input type="text"> <button onclick="irAPag({{limit}})">ir</button>
+<script>
+  function irAPag(limit) {
+    const pagDeseada = document.querySelector('input').value || 1
+    window.location = `/views/realTimeCarts/?limit=${limit}&page=${pagDeseada}`
+  }
+</script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+    integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/js/cargaCarts.js"></script>
