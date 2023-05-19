@@ -1,47 +1,32 @@
-import { usuarioModel } from '../models/usuario.model.js'
+import { usuariosManager } from '../managers/UserManager.js'
+import { criptografiador } from '../utils/bcrypt.js'
 
-export async function postSesiones(req, res, next) {
-  console.log(req.body)
 
-  const usuarioEncontrado = await usuarioModel.findOne({ email: req.body.email }).lean()
-  if (!usuarioEncontrado) return res.sendStatus(401)
+export async function postSesionesController(req, res, next) {
+    const credenciales = req.body
 
-  if (usuarioEncontrado.password !== req.body.password) {
-    return res.sendStatus(401)
-  }
+    try {
+        console.log('aun no pude encontrar el correo')
 
-  req.session.user = {
-    name: usuarioEncontrado.first_name + ' ' + usuarioEncontrado.last_name,
-    email: usuarioEncontrado.email,
-    age: usuarioEncontrado.age,
-  }
-  if (usuarioEncontrado.email.includes("admin")) {
-    req.session.admin = {
-      email: usuarioEncontrado.email
-    };
-  }
+        const usuario = await usuariosManager.obtenerSegunEmail(credenciales.email)
+        console.log('pude encontrar el correo')
+        if (!criptografiador.comparar(credenciales.password, usuario.password)) {
+            return next(res.sendStatus(203))
+        }
+        console.log('apenas generare la cookie')
+        const token = criptografiador.generarToken(usuario)
+        console.log('cookie creada con exito')
+        res.cookie('authToken', token, { httpOnly: true, signed: true, maxAge: 1000 * 60 * 60 * 24 })
+        console.log('la cookie nada que la encuentro')
 
-  res.status(201).json(req.session.user)
+        res.sendStatus(201)
+
+    } catch (error) {
+        next(new Error('AUTHENTICATION ERROR'))
+    }
 }
 
-export async function deleteSesiones(req, res, next) {
-  req.session.destroy(err => {
+export async function deleteSesionesController(req, res, next) {
+    res.clearCookie('authToken', { httpOnly: true, signed: true, maxAge: 1000 * 60 * 60 * 24 })
     res.sendStatus(200)
-  })
-}
-
-export function getCurrentSessionController(req, res, next) {
-  // passport guarda la sesion directamente en ** req.user ** en lugar del campo session de la peticion !
-  res.json(req.user)
-}
-
-export async function logoutSessionsController(req, res, next) {
-  // lo que estaba acá lo reemplacé por el atajo que me provee passport
-  req.logout(err => {
-      res.sendStatus(200)
-  })
-}
-
-export function postSessionsController(req, res, next) {
-  res.status(201).json(req.user)
 }

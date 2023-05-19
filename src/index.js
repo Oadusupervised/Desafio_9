@@ -13,11 +13,24 @@ import { PORT } from './config/port.js'
 import { apiRouter } from './routers/api.routers.js';
 import { CartManager} from './Managers/CartManager.js';
 import cors from 'cors'
-import session from './middlewares/session.js'
-import {webRouter} from './routers/passport_routers/web.router.js'
+import cookieParser from 'cookie-parser'
+import { COOKIE_SECRET } from '../src/config/auth.config.js'
+
 await conectar()
 
 const app =express()
+
+app.listen(PORT,()=>{
+    console.log(`escuchando en puerto ${PORT}`)
+    console.log('usar localhost:8080/views/realTimeProducts')
+    console.log('usar localhost:8080/views/realTimeMessages')
+    console.log('usar localhost:8080/views/realTimeCarts')
+    console.log('usar localhost:8080/register')
+    console.log('usar localhost:8080/login')
+    console.log('usar localhost:8080/views/current')
+
+})
+app.use(cookieParser(COOKIE_SECRET))
 
 //await cartModel.insertMany(carts)
 //await messageModel.insertMany(messages)
@@ -26,31 +39,19 @@ const app =express()
 hbs.registerHelper('json', function(context) {
     return JSON.stringify(context);
 })
-
 app.use(cors({ origin: "*" }));
-app.use(express.static("public"));
-app.use(session)
+
+app.use(express.static("./public"));
+app.use(express.json())
+//app.use(session)
 app.engine('handlebars', engine())
 app.set('views', './views')
 app.set('view engine', 'handlebars')
-app.use(express.json())
 app.use('/views',routerVistas)
 app.use('/api',apiRouter)
-app.use('/', webRouter)
+//app.use('/', webRouter)
 
 //await cartModel.find().populate('nombreProducts.product')
 
-app.listen(PORT,()=>{
-    console.log(`escuchando en puerto ${PORT}`)
-    console.log('usar localhost:8080/views/realTimeProducts')
-    console.log('usar localhost:8080/views/realTimeMessages')
-    console.log('usar localhost:8080/views/realTimeCarts')
-    console.log('usar localhost:8080/views/register')
-    console.log('usar localhost:8080/views/login')
-    console.log('usar localhost:8080/views/profile')
-
-
-
-})
 
 //console.log(cartManager.buscarCosas() + 'estos son los carritos')

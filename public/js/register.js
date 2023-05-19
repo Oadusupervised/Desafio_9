@@ -9,21 +9,26 @@ if (formRegister instanceof HTMLFormElement) {
     const input_email = document.querySelector('#input_email')
     const input_age = document.querySelector('#input_age')
     const input_password = document.querySelector('#input_password')
+    const input_role = document.querySelector('#input_role')
 
     if (
       input_first_name instanceof HTMLInputElement &&
       input_last_name instanceof HTMLInputElement &&
       input_email instanceof HTMLInputElement &&
       input_age instanceof HTMLInputElement &&
-      input_password instanceof HTMLInputElement
+      input_password instanceof HTMLInputElement&&
+      input_role instanceof HTMLInputElement 
+
     ) {
 
       const datosUsuario = {
+        
+        email: input_email.value,
+        password: input_password.value,
         first_name: input_first_name.value,
         last_name: input_last_name.value,
-        email: input_email.value,
         age: input_age.value,
-        password: input_password.value,
+        role: input_role.value
       }
 
       const usuarioCreado = await fetch('/api/usuarios', {

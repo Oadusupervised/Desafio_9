@@ -2,13 +2,13 @@ import { cartModel } from '../models/carts.js';
 import { messageModel } from '../models/messages.js';
 import { Router } from 'express'
 import { productModel } from '../models/products.js';
-import { postProductController } from '../controllers/postProductController.js';
-import { profileView } from '../controllers/web/perfil.controller.js';
+import { postProductController } from '../controllers/ecommerce/postProductController.js';
+import { CurrentView } from '../controllers/web/perfil.controller.js';
 import { loginView } from '../controllers/web/login.controller.js';
 import { registroView } from '../controllers/web/registro.controller.js';
-import {soloAutenticados} from '../middlewares/autenticacionWeb.js'
-import {postMessagesController} from '../controllers/postMessagesController.js'
-import {postCartsController} from '../controllers/postCartsController.js'
+import {extraerCredenciales, soloAutenticados} from '../middlewares/autenticacionWeb.js'
+import {postMessagesController} from '../controllers/ecommerce/postMessagesController.js'
+import {postCartsController} from '../controllers/ecommerce/postCartsController.js'
 
 export const routerVistas = Router()
 
@@ -122,11 +122,15 @@ routerVistas.get('/realTimeProducts', async (req, res, next) => {
 });
 
 
-//routerVistas.get('/register', registroView)
+routerVistas.get('/register', registroView)
 
-//routerVistas.get('/login',loginView)
+routerVistas.get('/login',loginView)
 
-routerVistas.get('/profile',soloAutenticados,profileView)
+routerVistas.get('/current',extraerCredenciales,soloAutenticados ,async (req,res,next)=>{
+    res.render('current', {
+        pageTitle: 'Perfil', user: req.user 
+      })
+})
 
 routerVistas.post('/realTimeProducts', postProductController)
 

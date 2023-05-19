@@ -1,28 +1,24 @@
 import express,{Router} from 'express'
 import { productManager } from '../Managers/ProductManager.js';
 import { cartManager } from '../Managers/CartManager.js';
-import { postUsuarios } from '../controllers/usuarios.controller.js';
+import { postUsuariosController } from '../controllers/usuarios.controller.js';
 import * as sesionesController from '../controllers/sesiones.controller.js'
-import { soloLogueadosApi } from '../middlewares/soloLogueados.js'
-import {
-    postSessionsController,
-    getCurrentSessionController,
-    logoutSessionsController
-} from '../controllers/sesiones.controller.js'
-import { autenticacionPorGithub_CB, autenticacionPorGithub, autenticacionUserPass } from '../middlewares/passport.js'
-import { usersRouter } from './passport_routers/users.router.js'
-import { sessionsRouter } from './sessions.router.js'
+import { sesionesRouter } from './sessions.router.js'
+import { usuariosRouter } from './usuarios.router.js';
 
 export const apiRouter= Router()
 
+apiRouter.use('/sessions', sesionesRouter)
+apiRouter.use('/usuarios', usuariosRouter)
+
 apiRouter.use(express.json())
 apiRouter.use(express.urlencoded({ extended: true }))
-
-apiRouter.use('/users', usersRouter)
-apiRouter.use('/sessions', sessionsRouter)
-apiRouter.post("/usuarios",postUsuarios);
-apiRouter.post('/sesiones', sesionesController.postSesiones)
-apiRouter.delete('/sesiones', sesionesController.deleteSesiones)
+apiRouter.use((error, req, res, next) => {
+  if (error.message === 'AUTHENTICATION ERROR') {
+    return res.sendStatus(401)
+  }
+  next(error)
+})
 
 
 //le cargo productos al carrito

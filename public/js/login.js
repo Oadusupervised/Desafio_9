@@ -17,19 +17,22 @@ if (formLogin instanceof HTMLFormElement) {
         password: input_password.value,
       }
 
-      const { status } = await fetch('/api/sesiones', {
+      const response= await fetch('/api/sessions', {
         method: 'POST',
+        body: JSON.stringify(datosUsuario),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datosUsuario)
+        }
       })
 
-      if (status === 201) {
-        window.location.href = '/views/profile'
+      if (response.status === 201) {
+        window.location.href = '/views/current'
       } else {
         console.log('[login] estado inesperado: ' + status)
+      }
+      if (response.status === 203) {
+        window.location.href = '/views/login'
       }
     }
   })

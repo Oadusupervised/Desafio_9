@@ -1,0 +1,18 @@
+<h1>Listado de usuarios disponibles</h1>
+<div id="listadoUsuarios">
+    {{#if hayUsuarios}}
+    <ul>
+        {{#each usuarios}}
+        <li>Nombre: {{this.nombre}} | email: {{this.email}}</li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>no hay usuarios para mostrar</p>
+    {{/if}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+    integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/js/listadoUsuarios.js"></script>

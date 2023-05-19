@@ -1,14 +1,23 @@
-import { usuarioModel } from '../models/usuario.model.js'
+import { User } from '../entidades/User.js'
+import { usuariosManager } from '../managers/UserManager.js'
+import { criptografiador } from '../utils/bcrypt.js'
 
-export async function postUsuarios(req, res, next) {
-  console.log(req.body)
-  const usuarioCreado = await usuarioModel.create(req.body)
+export async function postUsuariosController(req, res, next) {
+    const datosUsuario = req.body
+    console.log(datosUsuario)
 
-  req.session.user = {
-    name: usuarioCreado.first_name + ' ' + usuarioCreado.last_name,
-    email: usuarioCreado.email,
-    age: usuarioCreado.age,
-  }
+    try {
+        datosUsuario.password = criptografiador.hashear(datosUsuario.password)
+        //console.log(datosUsuario.password)
+        //const usuario = new User(datosUsuario)
+        //console.log(usuario.datos())
+        const usuarioGuardado = await usuariosManager.guardar(datosUsuario)
 
-  res.status(201).json(usuarioCreado)
+        const token = criptografiador.generarToken(usuarioGuardado)
+        res.cookie('authToken', token, { httpOnly: true, signed: true, maxAge: 1000 * 60 * 60 * 24 })
+
+        res.status(201).json(usuarioGuardado)
+    } catch (error) {
+        next(error)
+    }
 }
