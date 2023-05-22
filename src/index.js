@@ -12,7 +12,7 @@ import { routerVistas } from './routers/views.router.js'
 import { PORT } from './config/port.js'
 import { apiRouter } from './routers/api.routers.js';
 import { CartManager} from './Managers/CartManager.js';
-import cors from 'cors'
+//import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { COOKIE_SECRET } from '../src/config/auth.config.js'
 
