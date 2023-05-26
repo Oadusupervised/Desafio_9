@@ -25,8 +25,8 @@ app.listen(PORT,()=>{
     console.log('usar localhost:8080/views/realTimeProducts')
     console.log('usar localhost:8080/views/realTimeMessages')
     console.log('usar localhost:8080/views/realTimeCarts')
-    console.log('usar localhost:8080/register')
-    console.log('usar localhost:8080/login')
+    console.log('usar localhost:8080/views/register')
+    console.log('usar localhost:8080/views/login')
     console.log('usar localhost:8080/views/current')
 
 })
@@ -39,7 +39,7 @@ app.use(cookieParser(COOKIE_SECRET))
 hbs.registerHelper('json', function(context) {
     return JSON.stringify(context);
 })
-app.use(cors({ origin: "*" }));
+//app.use(cors({ origin: "*" }));
 
 app.use(express.static("./public"));
 app.use(express.json())
